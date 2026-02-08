@@ -1,0 +1,116 @@
+<?php
+require "db.php";
+
+/* HANDLE NEW POST */
+if (isset($_POST['post'])) {
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $feeling = mysqli_real_escape_string($conn, $_POST['feeling']);
+
+    mysqli_query($conn, 
+        "INSERT INTO vlogs (username, feeling) VALUES ('$username', '$feeling')"
+    );
+    header("Location: index.php");
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unspoken Feelings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <div class="logo">🖤 Unspoken Feelings</div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#contact">Contact</a>
+        <a href="#">Login</a>
+    </nav>
+</header>
+
+<main>
+
+<!-- ===== POST FEELINGS ===== -->
+<section class="post-section">
+    <h2>Share Your Feelings</h2>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Your Username" required>
+        <textarea name="feeling" placeholder="Write your feelings..." required></textarea>
+        <button type="submit" name="post">Post Vlog</button>
+    </form>
+</section>
+
+<!-- ===== DISPLAY VLOGS ===== -->
+<section class="vlog-section">
+    <h2>Recent Feelings</h2>
+
+    <?php
+    $vlogs = mysqli_query($conn, "SELECT * FROM vlogs ORDER BY id DESC");
+
+    while ($row = mysqli_fetch_assoc($vlogs)) {
+        $vlog_id = $row['id'];
+    ?>
+        <div class="vlog">
+            <div class="user">@<?php echo $row['username']; ?> </div>
+            <div class="text"><?php echo nl2br($row['feeling']); ?></div>
+
+            <a class="like-btn" href="like.php?id=<?php echo $vlog_id; ?>">
+                ❤️ <?php echo $row['likes']; ?>
+            </a>
+
+            <!-- COMMENTS -->
+            <div class="comments">
+                <h4>Comments</h4>
+
+                <?php
+                $comments = mysqli_query($conn, 
+                    "SELECT * FROM comments WHERE vlog_id=$vlog_id ORDER BY id DESC"
+                );
+
+                while ($c = mysqli_fetch_assoc($comments)) {
+                    echo "<p><b>@{$c['username']}:</b> {$c['comment']}</p>";
+                }
+                ?>
+
+                <form action="comment.php" method="POST">
+                    <input type="hidden" name="vlog_id" value="<?php echo $vlog_id; ?>">
+                    <input type="text" name="username" placeholder="Your name" required>
+                    <input type="text" name="comment" placeholder="Write a comment..." required>
+                    <button type="submit">Comment</button>
+                </form>
+            </div>
+        </div>
+    <?php } ?>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="info-section">
+    <h2>About Us</h2>
+    <p>
+        A safe place to express unspoken thoughts, hidden emotions,
+        and real feelings. You are not alone 🤍
+    </p>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="info-section">
+    <h2>Contact</h2>
+    <p>Email: support@unspokenfeelings.com</p>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <p>© 2026 Unspoken Feelings | Express Yourself Freely</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
