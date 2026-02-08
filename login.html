@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | My Thoughts</title>
+
+  <!-- Main site styles (for navbar) -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Login page styles -->
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <div class="logo">
+  <span class="logo-icon">🖋️</span>
+  <span class="logo-text">Unspoken <strong>WORDS</strong></span>
+</div>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#login" class="active">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Login / Signup Box -->
+  <div class="auth-container">
+    <h2 id="formTitle">Login</h2>
+
+    <form id="authForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="switch">
+      Don’t have an account?
+      <span onclick="toggleForm()">Sign Up</span>
+    </p>
+  </div>
+
+  <!-- Only login JS (IMPORTANT) -->
+  <script src="login.js"></script>
+    <!-- Footer -->
+  <footer>
+    <p>© 2026 Unspoken Words | Express Without Fear</p>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
